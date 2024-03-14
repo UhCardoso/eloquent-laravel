@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'title',
+        'body',
+        'date'
+    ];
+
     // personalizando informações da tabela caso necessário
     // protected $table = 'postagens'; //mudar nome da tabela
     // protected $primaryKey = 'id'; // mudar nome da chave primária

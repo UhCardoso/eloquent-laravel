@@ -16,6 +16,14 @@ use Illuminate\Support\Str;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/insert-dinamico', function(Request $request) {
+    $post = Post::create($request->all());// dados da request ?title=fsdfsfsadf&user_id=2&body=body&date=2024-11-21
+
+    $posts = Post::get();
+
+    return $posts;
+});
+
 Route::get('insert', function(Post $post, Request $request) {
     $post->user_id = 1;
     $post->title = $request->name;
