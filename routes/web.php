@@ -13,6 +13,24 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/where', function(User $user) {
+    //$user = $user->where('email', '=', 'goldner.alf@example.net')->first(); //com segundo parametro de comparação
+    //$user = $user->where('email', 'goldner.alf@example.net')->first(); //quando usa comparação, não precisa informar o simbolo no segundo parametro
+    $filter = 'a';
+    //$users = $user->where('name', 'LIKE', "%{$filter}%")->get(); //retorna valor que contenha letras passadas no parametro filter
+    //$users = $user->where('name', 'LIKE', "%{$filter}%")
+    //                ->orWhereNot('name', 'Cardoso') //whereNot | whereName('Cardoso') | whereIn('email', [array, com, dados]) | orWhereIn('email', [array, com, dados])
+    //                ->get(); // Fazer multiplas querys
+
+    $users  = $user->where('name', 'LIKE', "%{$filter}")
+                    ->orWhere(function($query) use ($filter) {
+                        $query->where('name', '!=', 'Cardoso');
+                        $query->where('name', '!=', "%{$filter}");
+                    })
+                    ->get();// Multiplas querys passando function como parametro do or Where possibilitanso até filtrar outras tabelas
+
+    dd($users);
+});
 
 Route::get('/select', function() {
     //$users = User::all() // pegar todos os dados
