@@ -16,13 +16,13 @@ use Illuminate\Support\Str;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('softdelete', function() {
-    Post::destroy(5);
+Route::get('/accessor', function() {
+    $post = Post::first();
 
-    $posts = Post::get();
-
-    return $posts;
+    return $post->title_and_body;
 });
+
+//=========================================================================================
 
 Route::get('/delete', function() {
     // Post::destroy(1, 2, 4); // Dá mais possibilidade de deletar vários registros pelo id
