@@ -16,6 +16,17 @@ use Illuminate\Support\Str;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/delete', function() {
+    // Post::destroy(1, 2, 4); // Dá mais possibilidade de deletar vários registros pelo id
+
+    $post = Post::where('id', 3)->first();
+
+    if(!$post)
+        return "Post not found";
+
+    $post->delete()
+});
+
 Route::get('/update', function(Request $request) {
     if(!$post = Post::find(1))
         return 'Post not found';
