@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Post;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,18 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('insert', function(Post $post, Request $request) {
+    $post->user_id = 1;
+    $post->title = $request->name;
+    $post->body = Str::random(30).'descrição postagem teste ';
+    $post->date = date('Y-m-d');
+    $post->save(); // Salvar dados acima no banco de dados
+
+    $posts = Post::get();
+
+    return $posts;
+});
+
 Route::get('/select', function() {
     //$users = User::all() // pegar todos os dados
     //$users = User::where('id', '>=',10)->get(); //pode forçar query com o get
