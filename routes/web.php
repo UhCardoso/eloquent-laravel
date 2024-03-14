@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('pagination', function(User $user) {
+    //$users = $user->paginate(30); // 30 resultados por página >> parametro para acessar outras paginas /pagination?page=2
+    //$users = $user->where('name', 'LIKE', "%a%")->paginate(); // filtrar registros retornando os dados no formato paginate -- passe na rota o /?page=2&filter=a para o total de registros se respeitado no filtro
+    
+    $filter = request('filter');
+    $totalPage = request('paginate', 10); // retornar 10 itens por pagina caso não passe o parametro
+    $users = $user->where('name', 'LIKE', "%{$filter}%")->paginate($totalPage); // retornar o numero de registros por pagina dinamicamente por parametro
+
+    return $users;
+});
+
 Route::get('/where', function(User $user) {
     //$user = $user->where('email', '=', 'goldner.alf@example.net')->first(); //com segundo parametro de comparação
     //$user = $user->where('email', 'goldner.alf@example.net')->first(); //quando usa comparação, não precisa informar o simbolo no segundo parametro
