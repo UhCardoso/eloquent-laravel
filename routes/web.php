@@ -13,15 +13,17 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('pagination', function(User $user) {
-    //$users = $user->paginate(30); // 30 resultados por página >> parametro para acessar outras paginas /pagination?page=2
-    //$users = $user->where('name', 'LIKE', "%a%")->paginate(); // filtrar registros retornando os dados no formato paginate -- passe na rota o /?page=2&filter=a para o total de registros se respeitado no filtro
-    
-    $filter = request('filter');
-    $totalPage = request('paginate', 10); // retornar 10 itens por pagina caso não passe o parametro
-    $users = $user->where('name', 'LIKE', "%{$filter}%")->paginate($totalPage); // retornar o numero de registros por pagina dinamicamente por parametro
+Route::get('/select', function() {
+    //$users = User::all() // pegar todos os dados
+    //$users = User::where('id', '>=',10)->get(); //pode forçar query com o get
+    //$user = User::where('id', 10)->first(); // trazer o user direto sem ser array
+    //$user = User::first(); // trazer primeiro dado da tabela
+    //$user = User::find(10); // retornar usuário com id igual a 10
+    //$user = User::findOrFail(request('id')); // se não encontrar, retorna erro 404 (usado em API)
+    //$user = User::where('name', request('name'))->firstOrFail(); // retorna nome ou retorna 404 se não encontrar
+    $user = User::firstWhere('name', request('name')); // faz a mesma coisa da linha acima
 
-    return $users;
+    dd($user->name);
 });
 
 Route::get('/where', function(User $user) {
@@ -43,17 +45,22 @@ Route::get('/where', function(User $user) {
     dd($users);
 });
 
-Route::get('/select', function() {
-    //$users = User::all() // pegar todos os dados
-    //$users = User::where('id', '>=',10)->get(); //pode forçar query com o get
-    //$user = User::where('id', 10)->first(); // trazer o user direto sem ser array
-    //$user = User::first(); // trazer primeiro dado da tabela
-    //$user = User::find(10); // retornar usuário com id igual a 10
-    //$user = User::findOrFail(request('id')); // se não encontrar, retorna erro 404 (usado em API)
-    //$user = User::where('name', request('name'))->firstOrFail(); // retorna nome ou retorna 404 se não encontrar
-    $user = User::firstWhere('name', request('name')); // faz a mesma coisa da linha acima
+Route::get('pagination', function(User $user) {
+    //$users = $user->paginate(30); // 30 resultados por página >> parametro para acessar outras paginas /pagination?page=2
+    //$users = $user->where('name', 'LIKE', "%a%")->paginate(); // filtrar registros retornando os dados no formato paginate -- passe na rota o /?page=2&filter=a para o total de registros se respeitado no filtro
+    
+    $filter = request('filter');
+    $totalPage = request('paginate', 10); // retornar 10 itens por pagina caso não passe o parametro
+    $users = $user->where('name', 'LIKE', "%{$filter}%")->paginate($totalPage); // retornar o numero de registros por pagina dinamicamente por parametro
 
-    dd($user->name);
+    return $users;
+});
+
+Route::get('/orderby', function(User $user) {
+    $users = $user->orderBy('name', 'DESC')->get(); // retornar registros de forma decrescente considerando a tabela escolhida
+    //o orderBy pode ser usando mais de uma vez e pode ser combinado com o ->where()
+
+    return $users;
 });
 
 Route::get('/', function () {
