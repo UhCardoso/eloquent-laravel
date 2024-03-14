@@ -16,8 +16,22 @@ use Illuminate\Support\Str;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/update', function(Request $request) {
+    if(!$post = Post::find(1))
+        return 'Post not found';
+
+    //$post->title = "Titulo atualizado";
+    //$post->save();
+
+    $post->update($request->all());
+
+    dd($post);
+
+    return Post::find(1);
+});
+
 Route::get('/insert-dinamico', function(Request $request) {
-    $post = Post::create($request->all());// dados da request ?title=fsdfsfsadf&user_id=2&body=body&date=2024-11-21
+    Post::create($request->all());// dados da request ?title=fsdfsfsadf&user_id=2&body=body&date=2024-11-21
 
     $posts = Post::get();
 
