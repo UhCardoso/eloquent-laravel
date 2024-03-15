@@ -108,7 +108,13 @@ Criar a nova coluna:
 $ php artisan migrate
 ```
 
-### Acessor 
+### Acessor
+
+Quando usar accessors: 
+Use accessors quando precisar formatar ou processar
+dados ao recuperá-los do banco de dados, mas não quer alterar a forma como eles são armazenados.
+Accessors são sobre como você vê os dados
+
 No arquivo Model podemos manipular o retorno de um campo criando o método contendo o nome dele com a palavra "Attribute" no final. Ex:
 
 ```
@@ -189,6 +195,29 @@ use App\Accessors\DefaultAccessors; <<<<
 class Post extends Model
 {
     use HasFactory, SoftDeletes, DefaultAccessors; <<<<
+```
+
+### MUTATOR
+Usado para alterar dado antes de inseri-lo no banco de dados, colocando o prefixo do método do Model com a palavra "set". Ex:
+
+```
+public function setDateAttribute($value)
+{
+    $this->attributes['date'] = Carbon::make($value)->format('Y-m-d');
+}
+```
+### CASTS
+
+Quando usar CASTS:
+quando precisar garantir que um atributo seja sempre tratado como um determinado tipo
+dentro da sua aplicação, como converter automaticamente strings JSON em arrays PHP ou formatar campos de data.
+São sobre como os dados são apresentados e tratados no seu código Laravel
+
+```
+protected $casts = [
+    'date' => 'datetime:d/m/Y',
+    'active' => 'boolean'
+];
 ```
 
 -- descrever como criar dados fake pelo tinker --

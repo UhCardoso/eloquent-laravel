@@ -17,6 +17,22 @@ use Illuminate\Support\Str;
 |
 */
 
+//MUTATOR:Permite a alteração de dados na hora da inserção no DB
+// No atributos do model utiliga o prefixo "set"
+Route::get('/mutators', function () {
+    $user = Post::first();
+    $post = Post::create([
+        'user_id' => $user->id,
+        'title' => 'um novo titulo ' . Str::random(10),
+        'body' => Str::random(100),
+        'date' => now()
+    ]);
+
+    return $post;
+});
+
+//ACESSORES:Permite a alteração de dados na hora de retornar os dados do DB
+// No atributos do model utiliga o prefixo "get"
 Route::get('/accessor', function () {
     $post = Post::first();
 

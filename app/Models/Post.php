@@ -19,11 +19,19 @@ class Post extends Model
         'date'
     ];
 
-    // retorna dados no tipo e padrão especifico que voçê precisa
+    /*
+        Quando usar CASTS:
+        quando precisar garantir que um atributo seja sempre tratado como um determinado tipo
+        dentro da sua aplicação, como converter automaticamente strings JSON em arrays PHP ou formatar campos de data.
+        São sobre como os dados são apresentados e tratados no seu código Laravel
+    */
     protected $casts = [
-        'date' => 'date',
+        'date' => 'datetime:d/m/Y',
         'active' => 'boolean'
     ];
+    /*
+    
+    */
 
     // personalizando informações da tabela caso necessário
     // protected $table = 'postagens'; //mudar nome da tabela
@@ -39,18 +47,33 @@ class Post extends Model
     //     'active' => true
     // ]; 
 
+    /*  
+        Quando usar accessors: 
+        Use accessors quando precisar formatar ou processar
+        dados ao recuperá-los do banco de dados, mas não quer alterar a forma como eles são armazenados.
+        Accessors são sobre como você vê os dados
+    */
+    // metodo ACESSOR
     // public function getTitleAttribute($value)
     // {
     //     return strtoupper($value);
     // }
 
+    // metodo ACESSOR
     // public function getTitleAndBodyAttribute()
     // {
     //     return $this->title . ' - '. $this->body;
     // }
 
+    // metodo ACESSOR
     // public function getDateAttribute($value)
     // {
     //     return Carbon::make($value)->format('d/m/Y');
     // }
+
+    //metodo MUTATOR
+    public function setDateAttribute($value)
+    {
+        $this->attributes['date'] = Carbon::make($value)->format('Y-m-d');
+    }
 }
