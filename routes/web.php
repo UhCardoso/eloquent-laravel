@@ -17,6 +17,16 @@ use Illuminate\Support\Str;
 |
 */
 
+Route::get('/observer', function () {
+    $post = Post::create([
+        'title' => 'titulo post ' . Str::random(10),
+        'body' => Str::random(20) . ' descrição postagems',
+        'date' => now()
+    ]);
+
+    return $post;
+});
+
 Route::get('/global-scopes', function () {
     $posts = Post::get();
 

@@ -15,7 +15,6 @@ class Post extends Model
     use HasFactory, SoftDeletes, DefaultAccessors;
     // filtra a inserção de dados no DB aceitando somente os dados abaixo vendo da requisição
     protected $fillable = [
-        'user_id',
         'title',
         'body',
         'date'

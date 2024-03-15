@@ -203,7 +203,7 @@ class Post extends Model
 ```
 
 ### MUTATOR
-Usado para alterar dado antes de inseri-lo no banco de dados, colocando o prefixo do método do Model com a palavra "set". Ex:
+Usado para alterar dado antes de inseri-lo no banco de dados, colocando o sufixo do método do Model com a palavra "set". Ex:
 
 ```
 public function setDateAttribute($value)
@@ -252,4 +252,57 @@ Route::get('/local-scope', function () {
     return $posts;
 });
 ```
-o ``lastWeek()`` irá reconhecer automaticamente que estamos chamando o método scopeLastWeek() no model, pois ele utiliza o prefixo "scope" no nome do método.
+o ``lastWeek()`` irá reconhecer automaticamente que estamos chamando o método scopeLastWeek() no model, pois ele utiliza o sufixo "scope" no nome do método.
+
+
+### Observer
+
+No Laravel, um Observer serve para centralizar a lógica relacionada a eventos de ciclo de vida dos modelos Eloquent. Cada modelo em Laravel pode disparar uma série de eventos durante seu ciclo de vida, como creating, created, updating, updated, saving, saved, deleting, deleted, retrieved.
+
+Quando usar o OBSERVER:
+
+Se há ações que você precisa realizar sempre que um modelo é criado, atualizado, excluído, etc., como limpar cache, atualizar outras partes do banco de dados, enviar notificações, entre outros.
+
+o primerio passo do processo para utilizar um Observer no laravel e usar o comando de criação do "``Observer``":
+
+```
+php artisan make:observer UserObserver --model=User
+```
+
+Será criado um arquivo de "``PostObserver.php``" no caminho "``App\Observes``".
+
+Exemplo:
+
+```
+namespace App\Observers;
+
+use App\Models\Post;
+
+class PostObserver
+{
+    /**
+     * Handle the Post "created" event.
+     *
+     * @param  \App\Models\Post  $post
+     * @return void
+     */
+    public function created(Post $post)
+    {
+        //
+    }
+
+```
+
+Os métodos desse arquivo serão chamados após executar a ação no model.
+Para fazer esses métodos serem chamados após antes de executar a ação no model basta alterar o nome do método deixando "ing" no final do nome, no caso acima o "``created`` será "``creating``".
+
+No arquivo "`App\Providers\EventServiceProvider.php`", relacione o arquivo "``PostObserser.php``" ao Model "``Post``".
+
+Exemplo:
+
+```
+ public function boot()
+{
+    Post::observe(PostObserver::class);
+}
+```
