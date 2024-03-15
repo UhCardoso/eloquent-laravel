@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Accessors\DefaultAccessors;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,11 +11,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Post extends Model
 {
     use HasFactory, SoftDeletes, DefaultAccessors;
+    // filtra a inserção de dados no DB aceitando somente os dados abaixo vendo da requisição
     protected $fillable = [
         'user_id',
         'title',
         'body',
         'date'
+    ];
+
+    // retorna dados no tipo e padrão especifico que voçê precisa
+    protected $casts = [
+        'date' => 'date',
+        'active' => 'boolean'
     ];
 
     // personalizando informações da tabela caso necessário
@@ -39,5 +47,10 @@ class Post extends Model
     // public function getTitleAndBodyAttribute()
     // {
     //     return $this->title . ' - '. $this->body;
+    // }
+
+    // public function getDateAttribute($value)
+    // {
+    //     return Carbon::make($value)->format('d/m/Y');
     // }
 }

@@ -190,3 +190,5 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes, DefaultAccessors; <<<<
 ```
+
+-- descrever como criar dados fake pelo tinker --

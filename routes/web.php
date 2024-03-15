@@ -16,27 +16,28 @@ use Illuminate\Support\Str;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/accessor', function() {
+
+Route::get('/accessor', function () {
     $post = Post::first();
 
-    return $post->title_and_body;
+    return $post;
 });
 
 //=========================================================================================
 
-Route::get('/delete', function() {
+Route::get('/delete', function () {
     // Post::destroy(1, 2, 4); // Dá mais possibilidade de deletar vários registros pelo id
 
     $post = Post::where('id', 3)->first();
 
-    if(!$post)
+    if (!$post)
         return "Post not found";
 
     $post->delete();
 });
 
-Route::get('/update', function(Request $request) {
-    if(!$post = Post::find(1))
+Route::get('/update', function (Request $request) {
+    if (!$post = Post::find(1))
         return 'Post not found';
 
     //$post->title = "Titulo atualizado";
@@ -49,18 +50,18 @@ Route::get('/update', function(Request $request) {
     return Post::find(1);
 });
 
-Route::get('/insert-dinamico', function(Request $request) {
-    Post::create($request->all());// dados da request ?title=fsdfsfsadf&user_id=2&body=body&date=2024-11-21
+Route::get('/insert-dinamico', function (Request $request) {
+    Post::create($request->all()); // dados da request ?title=fsdfsfsadf&user_id=2&body=body&date=2024-11-21
 
     $posts = Post::get();
 
     return $posts;
 });
 
-Route::get('insert', function(Post $post, Request $request) {
-    $post->user_id = 1;
-    $post->title = $request->name;
-    $post->body = Str::random(30).'descrição postagem teste ';
+Route::get('/insert', function (Post $post, Request $request) {
+    $post->user_id = 2;
+    $post->title = 'title post ' . Str::random(30);
+    $post->body = Str::random(30) . 'descrição postagem teste ';
     $post->date = date('Y-m-d');
     $post->save(); // Salvar dados acima no banco de dados
 
@@ -69,7 +70,7 @@ Route::get('insert', function(Post $post, Request $request) {
     return $posts;
 });
 
-Route::get('/select', function() {
+Route::get('/select', function () {
     //$users = User::all() // pegar todos os dados
     //$users = User::where('id', '>=',10)->get(); //pode forçar query com o get
     //$user = User::where('id', 10)->first(); // trazer o user direto sem ser array
@@ -82,7 +83,7 @@ Route::get('/select', function() {
     dd($user->name);
 });
 
-Route::get('/where', function(User $user) {
+Route::get('/where', function (User $user) {
     //$user = $user->where('email', '=', 'goldner.alf@example.net')->first(); //com segundo parametro de comparação
     //$user = $user->where('email', 'goldner.alf@example.net')->first(); //quando usa comparação, não precisa informar o simbolo no segundo parametro
     $filter = 'a';
@@ -92,19 +93,19 @@ Route::get('/where', function(User $user) {
     //                ->get(); // Fazer multiplas querys
 
     $users  = $user->where('name', 'LIKE', "%{$filter}")
-                    ->orWhere(function($query) use ($filter) {
-                        $query->where('name', '!=', 'Cardoso');
-                        $query->where('name', '!=', "%{$filter}");
-                    })
-                    ->get();// Multiplas querys passando function como parametro do or Where possibilitanso até filtrar outras tabelas
+        ->orWhere(function ($query) use ($filter) {
+            $query->where('name', '!=', 'Cardoso');
+            $query->where('name', '!=', "%{$filter}");
+        })
+        ->get(); // Multiplas querys passando function como parametro do or Where possibilitanso até filtrar outras tabelas
 
     dd($users);
 });
 
-Route::get('pagination', function(User $user) {
+Route::get('pagination', function (User $user) {
     //$users = $user->paginate(30); // 30 resultados por página >> parametro para acessar outras paginas /pagination?page=2
     //$users = $user->where('name', 'LIKE', "%a%")->paginate(); // filtrar registros retornando os dados no formato paginate -- passe na rota o /?page=2&filter=a para o total de registros se respeitado no filtro
-    
+
     $filter = request('filter');
     $totalPage = request('paginate', 10); // retornar 10 itens por pagina caso não passe o parametro
     $users = $user->where('name', 'LIKE', "%{$filter}%")->paginate($totalPage); // retornar o numero de registros por pagina dinamicamente por parametro
@@ -112,7 +113,7 @@ Route::get('pagination', function(User $user) {
     return $users;
 });
 
-Route::get('/orderby', function(User $user) {
+Route::get('/orderby', function (User $user) {
     $users = $user->orderBy('name', 'DESC')->get(); // retornar registros de forma decrescente considerando a tabela escolhida
     //o orderBy pode ser usando mais de uma vez e pode ser combinado com o ->where()
 
