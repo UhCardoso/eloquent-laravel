@@ -17,6 +17,15 @@ use Illuminate\Support\Str;
 |
 */
 
+Route::get('/events', function () {
+    $post = Post::create([
+        'user_id' => 4,
+        'title' => 'new Title' . Str::random(10),
+        'body' => Str::random(50),
+        'date' => now()
+    ]);
+});
+
 Route::get('/observer', function () {
     $post = Post::create([
         'title' => 'titulo post ' . Str::random(10),

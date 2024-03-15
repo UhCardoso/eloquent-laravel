@@ -306,3 +306,46 @@ Exemplo:
     Post::observe(PostObserver::class);
 }
 ```
+
+### Eventos
+
+Adicionar eventos no laravel para enviar um email por exemplo sempre que um método for executado.
+
+Criar evento:
+
+```
+php artisan make:event PostCreated
+```
+
+No arquivo Model usa o "PostCreated" por exemplo para chamar os eventos.
+
+```
+ protected $dispatchesEvents = [
+    'created' => PostCreated::class,
+];
+```
+
+Criar listener:
+```
+protected $dispatchesEvents = [
+    'created' => PostCreated::class,
+];
+
+```
+
+Ligar o evento criado ao listener no arquivo "```EventServiceProvider```" informando qual listener será rodado quando o evento for disparado:
+
+```
+protected $listen = [
+    Registered::class => [
+        SendEmailVerificationNotification::class,
+    ],
+    PostCreated::class => [
+        NotifyNewPostCreated::class
+    ]
+];
+```
+
+criar Model email:
+
+php artisan make:mail MailNewPostCreated
