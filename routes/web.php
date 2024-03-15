@@ -17,6 +17,12 @@ use Illuminate\Support\Str;
 |
 */
 
+Route::get('/global-scopes', function () {
+    $posts = Post::get();
+
+    return $posts;
+});
+
 Route::get('/anonymous-global-scopes', function () {
     //$posts = Post::get();    
     $posts = Post::withoutGlobalScope('year')->get(); //faz consulta no escopo global sem considerar os campos passados no parametro
