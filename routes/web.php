@@ -17,6 +17,13 @@ use Illuminate\Support\Str;
 |
 */
 
+Route::get('/anonymous-global-scopes', function () {
+    //$posts = Post::get();    
+    $posts = Post::withoutGlobalScope('year')->get(); //faz consulta no escopo global sem considerar os campos passados no parametro
+
+    return $posts;
+});
+
 Route::get('/local-scope', function () {
     //$posts = Post::lastWeek()->get();
     //$posts = Post::today()->get(); //pode utilizar ->where() de filtros após o scope
