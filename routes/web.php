@@ -17,6 +17,14 @@ use Illuminate\Support\Str;
 |
 */
 
+Route::get('/local-scope', function () {
+    //$posts = Post::lastWeek()->get();
+    //$posts = Post::today()->get(); //pode utilizar ->where() de filtros após o scope
+    $posts = Post::between('2024-03-01', '2024-03-30')->get();
+
+    return $posts;
+});
+
 //MUTATOR:Permite a alteração de dados na hora da inserção no DB
 // No atributos do model utiliga o prefixo "set"
 Route::get('/mutators', function () {

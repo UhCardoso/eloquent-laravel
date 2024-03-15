@@ -29,9 +29,27 @@ class Post extends Model
         'date' => 'datetime:d/m/Y',
         'active' => 'boolean'
     ];
-    /*
-    
-    */
+
+    // Local Scopes
+    public function scopeLastWeek($query)
+    {                                               //subdays: quantidade de dias atrás
+        return $this->whereDate('date', '>=', now()->subDays(7))
+            ->whereDate('date', '<=', now()->subDays(1)); // Recuperando posts entre 7 dias atrás e ontem(14/03/2024)
+    }
+
+    public function scopeToday()
+    {
+        return $this->whereDate('date', now());
+    }
+
+    public function scopeBetween($query, $firstDate, $lastDate)
+    {
+        $firstDate = Carbon::make($firstDate)->format('Y-m-d');
+        $lastDate = Carbon::make($lastDate)->format('Y-m-d');
+
+        return $this->whereDate('date', '>=', $firstDate)
+            ->whereDate('date', '<=', $lastDate);
+    }
 
     // personalizando informações da tabela caso necessário
     // protected $table = 'postagens'; //mudar nome da tabela

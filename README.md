@@ -1,5 +1,5 @@
 
-# Eloquent Laravel
+# Anotações de Estudo Eloquent Laravel
 
 Curso para aprofundar os conhecimentos no Eloquent no treinamento oferecido pela [Especializa TI](https://especializati.com.br/).
 
@@ -66,6 +66,11 @@ acessar o Model que será utilizado na aplicação passando as funções de cria
 ```
 \App\Models\User::factory()->count(100)->create();
 ```
+
+### Inserindo Dados Fake com o Tinker
+***********
+-- descrever como criar dados fake pelo tinker --
+***************
 
 ### SoftDelete
 
@@ -220,4 +225,31 @@ protected $casts = [
 ];
 ```
 
--- descrever como criar dados fake pelo tinker --
+### LOCAL SCOPE
+
+Local Scopes no Laravel são métodos definidos nos modelos Eloquent que permitem que você reutilize consultas SQL em várias partes do seu aplicativo. Eles são úteis para encapsular lógicas de consulta, mantendo seu código limpo e mais fácil de manter.
+
+Quando usar LOCAL SCOPE:
+1- Tiver consultas que você reutiliza frequentemente em diferentes partes do aplicativo.
+2- Quiser manter suas consultas organizadas e fáceis de ler e manter.
+
+O método no Model deverá começar com a palavra "``Scope``" seguido do nome da sua função.
+
+```
+public function scopeLastWeek($query)
+{                                              
+    return $this->whereDate('date', '>=', now()->subDays(4))
+        ->whereDate('date', '<=', now()->subDays(0));
+}
+```
+
+Chamando scope no arquivo rotas, por exemplo:
+
+```
+Route::get('/local-scope', function () {
+    $posts = Post::lastWeek()->get();
+
+    return $posts;
+});
+```
+o ``lastWeek()`` irá reconhecer automaticamente que estamos chamando o método scopeLastWeek() no model, pois ele utiliza o prefixo "scope" no nome do método.
