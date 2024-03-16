@@ -67,10 +67,56 @@ acessar o Model que será utilizado na aplicação passando as funções de cria
 \App\Models\User::factory()->count(100)->create();
 ```
 
-### Inserindo Dados Fake com o Tinker
-***********
--- descrever como criar dados fake pelo tinker --
-***************
+### Inserindo dados fake com Factory
+Criar arquivo de factory na pasta "``database\factories``"
+
+```
+$ php artisan make:factory PostFactory --model=Post
+```
+
+Gerar dados fake no banco de dados com o tinker
+
+```
+$ php artisan tinker
+```
+
+Inserir o seguinte comando para criar a factory com 10 usuários por exemplo:
+
+```
+>>> \App\Models\Post::factory()->count(10)->create();
+```
+No comando acima, passar a partir de qual Model sera gerada a factory
+
+Ou Também pode ser usado o comando Seeder:
+
+```
+$ php artisan make:seeder PostSeeder
+```
+No arquivo criado, deixar a seguinte estrutura para gerar 10 posts por exemplo:
+
+```
+public function run()
+{
+    Post::factory()->count(10)->create();
+}
+```
+
+Caso tenha mais de um seeder, pode chama-los no arquivo "``DatabaseSeeder.php``".
+
+```
+public function run()
+{
+    $this->call([
+        PostsSeeder::class
+    ]);
+}
+```
+
+Rodar seeder defenido:
+
+```
+$ php artisan db:seed
+```
 
 ### SoftDelete
 
@@ -266,7 +312,7 @@ Se há ações que você precisa realizar sempre que um modelo é criado, atuali
 o primerio passo do processo para utilizar um Observer no laravel e usar o comando de criação do "``Observer``":
 
 ```
-php artisan make:observer UserObserver --model=User
+$ php artisan make:observer UserObserver --model=User
 ```
 
 Será criado um arquivo de "``PostObserver.php``" no caminho "``App\Observes``".
@@ -314,7 +360,7 @@ Adicionar eventos no laravel para enviar um email por exemplo sempre que um mét
 Criar evento:
 
 ```
-php artisan make:event PostCreated
+$ php artisan make:event PostCreated
 ```
 
 No arquivo Model usa o "PostCreated" por exemplo para chamar os eventos.
